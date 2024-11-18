@@ -1,70 +1,170 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function Dashboard() {
+    return (
+        <ScrollView>
+            <View style={styles.container}>
+                <Text style={styles.greeting}>
+                    Hi, <Text style={styles.name}>Irfan 👋</Text>
+                </Text>
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+                <View style={styles.row}>
+                    <View style={[styles.card, styles.resultsCard]}>
+                        <Text style={[styles.cardTitle, { color: "#fff" }]}>
+                            Results
+                        </Text>
+                        <Text style={styles.percentage}>24%</Text>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                paddingTop: 30,
+                            }}
+                        >
+                            <View>
+                                <Text style={styles.subtext}>24</Text>
+                                <Text style={styles.subtext}>Positive</Text>
+                            </View>
+                            <View>
+                                <Text style={styles.subtext}>76</Text>
+                                <Text style={styles.subtext}>Negative</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={[styles.card, styles.entranceRateCard]}>
+                        <Text style={styles.cardTitle}>Entrance Rate</Text>
+                        <Text style={styles.entranceRate}>76%</Text>
+                        <Text style={[styles.subtext, { paddingTop: 30 }]}>
+                            From public to dirty zone
+                        </Text>
+                    </View>
+                </View>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        flex: 1,
+                    }}
+                >
+                    <View style={{ width: "48%" }}>
+                        <View style={[styles.card, { width: "100%", gap: 45 }]}>
+                            <Text style={styles.cardTitle}>In Queue</Text>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    gap: 10,
+                                    flexWrap: "wrap",
+                                }}
+                            >
+                                <View>
+                                    <Text style={styles.queueText}>105</Text>
+                                    <Text style={styles.queueText}>
+                                        Dirty Zone
+                                    </Text>
+                                </View>
+                                <View>
+                                    <Text style={styles.queueText}>22</Text>
+                                    <Text style={styles.queueText}>
+                                        Clean Zone
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={[styles.card, { width: "100%", gap: 45 }]}>
+                            <Text style={styles.cardTitle}>In Clean Zone</Text>
+                            <Text style={styles.peopleText}>126 People</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.card, styles.largeCard]}>
+                        <Text style={styles.cardTitle}>Waiting Time</Text>
+                        <View style={styles.graphPlaceholder}></View>
+                        <Text style={styles.timeText}>08:02 Minutes</Text>
+                    </View>
+                </View>
+            </View>
+        </ScrollView>
+    );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: "#f5f7fb",
+    },
+    greeting: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+    },
+    name: {
+        color: "#000080",
+    },
+    row: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+    },
+    card: {
+        padding: 15,
+        marginBottom: 20,
+        borderRadius: 10,
+        backgroundColor: "#fff",
+        elevation: 15,
+        width: "48%",
+    },
+    largeCard: {
+        justifyContent: "space-between",
+    },
+    resultsCard: {
+        backgroundColor: "#1c1c40",
+    },
+    entranceRateCard: {
+        borderColor: "#3d69fe",
+        borderWidth: 1,
+    },
+    cardTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        marginBottom: 8,
+        color: "#333",
+    },
+    percentage: {
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "#fff",
+    },
+    entranceRate: {
+        fontSize: 28,
+        fontWeight: "bold",
+        color: "#3d69fe",
+    },
+    queueText: {
+        fontSize: 12,
+        color: "#333",
+    },
+    subtext: {
+        fontSize: 14,
+        color: "#ccc",
+    },
+    graphPlaceholder: {
+        height: 60,
+        marginVertical: 10,
+        backgroundColor: "#ffe5e5",
+        borderRadius: 5,
+    },
+    timeText: {
+        fontSize: 16,
+        color: "#e63946",
+        fontWeight: "bold",
+    },
+    peopleText: {
+        fontSize: 24,
+        color: "#333",
+        fontWeight: "bold",
+    },
 });

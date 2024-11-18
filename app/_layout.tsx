@@ -1,37 +1,68 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { Poppins_400Regular, useFonts } from "@expo-google-fonts/poppins";
+import { Href, SplashScreen, Stack, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+    const router = useRouter();
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    const [fontsLoaded, error] = useFonts({ Poppins_400Regular });
+
+    const { isAuthenticated } = useAuth();
+
+    useEffect(() => {
+        if (fontsLoaded || error) {
+            SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded, error]);
+
+    useEffect(() => {
+        // Navigate based on authentication status
+        if (isAuthenticated !== null && fontsLoaded) {
+            if (isAuthenticated) {
+                router.replace("/(tabs)/" as Href);
+            } else {
+                router.replace("(auth)/login" as Href);
+            }
+        }
+    }, [isAuthenticated, fontsLoaded]);
+
+    if (!fontsLoaded && !error) {
+        return null;
     }
-  }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
-
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
-  );
+    return (
+        <AuthProvider>
+            <SafeAreaView style={styles.safeArea}>
+                <Stack
+                    screenOptions={{
+                        headerShown: false,
+                        contentStyle: { backgroundColor: "#fff" },
+                    }}
+                >
+                    <Stack.Screen
+                        name="(auth)/login"
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="(tabs)"
+                        options={{ headerShown: false }}
+                    />
+                </Stack>
+            </SafeAreaView>
+        </AuthProvider>
+    );
 }
+
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        paddingTop: 10,
+        // paddingHorizontal: 10,
+        backgroundColor: "#fff",
+    },
+});
