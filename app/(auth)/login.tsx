@@ -1,13 +1,5 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-} from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, Input, Button, YStack } from "tamagui";
 import React, { useEffect, useState } from "react";
 import { Href, Link, useRouter } from "expo-router";
 import { useAuth } from "@/context/AuthContext";
@@ -39,117 +31,75 @@ const Login = () => {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
+            style={{
+                flex: 1,
+            }}
             keyboardVerticalOffset={50}
         >
-            {/* <ScrollView style={{ flexGrow: 1 }}> */}
-            <View style={styles.wrapper}>
-                <View>
-                    <Text style={styles.welcome}>Welcome</Text>
-                    <Text style={styles.signInText}>
+            <YStack
+                paddingHorizontal={25}
+                paddingTop={50}
+                flex={1}
+                justifyContent="space-evenly"
+            >
+                <YStack>
+                    <Text fontFamily="$body" fontSize="$11">
+                        Welcome
+                    </Text>
+                    <Text fontFamily="$body" fontSize="$7" fontWeight="$thin">
                         Enter your credentials to continue.
                     </Text>
-                </View>
-                <View style={styles.inputWrapper}>
-                    <TextInput
+                </YStack>
+                <YStack gap="$3">
+                    <Input
+                        height={50}
+                        borderWidth="$0"
+                        borderRadius="$2"
+                        borderColor="$light-gray"
+                        paddingHorizontal="$4"
                         placeholder="Email"
-                        style={styles.inputEmail}
                         autoFocus
                         onChangeText={(text) => setEmail(text)}
                     />
-                    <View>
-                        <TextInput
+                    <YStack>
+                        <Input
+                            height={50}
+                            borderWidth="$0"
+                            borderRadius="$2"
+                            borderColor="$light-gray"
+                            paddingHorizontal="$4"
                             placeholder="Password"
-                            style={styles.inputEmail}
                             secureTextEntry
                             onChangeText={(text) => setPassword(text)}
                         />
                         <Link
                             href={"/(tabs)/" as Href}
-                            style={styles.forgotPasswordText}
+                            style={{
+                                textAlign: "right",
+                                paddingTop: 10,
+                                color: "#c9c9c9",
+                            }}
                         >
                             Forgot your password?
                         </Link>
-                    </View>
-                </View>
-                <View style={styles.btnWrapper}>
-                    <Text style={styles.errorText}>{error}</Text>
-                    <TouchableOpacity
-                        activeOpacity={0.8}
-                        style={styles.touchableOpacity}
+                    </YStack>
+                </YStack>
+                <YStack gap="$1">
+                    <Text color="red">{error}</Text>
+                    <Button
+                        backgroundColor={"#1794a7"}
+                        height={60}
+                        borderRadius="$2"
+                        fontSize="$5"
+                        color="$color.white"
                         onPress={handleLogin}
                     >
-                        <View style={styles.btnTextWraper}>
-                            <Text style={styles.btnText}>Sign In</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                {/* <View style={{ flex: 1, borderWidth: 1 }}>
-                    <Text>Hello world</Text>
-                </View> */}
-            </View>
-            {/* </ScrollView> */}
+                        Sign In
+                    </Button>
+                </YStack>
+            </YStack>
         </KeyboardAvoidingView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    wrapper: {
-        paddingHorizontal: 25,
-        paddingTop: 50,
-        flex: 1,
-        justifyContent: "space-evenly",
-        // flexGrow: 1,
-    },
-    welcome: {
-        fontSize: 40,
-        fontWeight: "500",
-    },
-    signInText: {
-        fontSize: 22,
-        fontWeight: "300",
-    },
-    inputWrapper: {
-        // paddingTop: 45,
-        gap: 20,
-    },
-    inputEmail: {
-        height: 50,
-        borderWidth: 1,
-        borderRadius: 10,
-        borderColor: "#f3f2f4",
-        paddingHorizontal: 20,
-        paddingTop: 0,
-    },
-    forgotPasswordText: {
-        textAlign: "right",
-        paddingTop: 10,
-        color: "#c9c9c9",
-    },
-    btnWrapper: {
-        // marginTop: 50,
-        gap: 5,
-    },
-    touchableOpacity: {
-        backgroundColor: "#1794a7",
-        height: 60,
-        borderRadius: 10,
-    },
-    btnTextWraper: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    btnText: {
-        fontSize: 18,
-        color: "#fff",
-    },
-    errorText: {
-        color: "red",
-    },
-});
 
 export default Login;

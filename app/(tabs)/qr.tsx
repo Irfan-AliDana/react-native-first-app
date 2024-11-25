@@ -1,11 +1,15 @@
 import { CameraView } from "expo-camera";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+import { View, XStack } from "tamagui";
 
 export default function Qr() {
     const [scanned, setScanned] = useState(false);
     const router = useRouter();
+
+    const { width, height } = Dimensions.get("window");
+    const focusBoxSize = width * 0.7;
 
     const handleBarcodeScanned = ({ data }: { data: any }) => {
         if (!scanned) {
@@ -21,7 +25,7 @@ export default function Qr() {
     );
 
     return (
-        <View style={styles.container}>
+        <View flex={1}>
             <CameraView
                 style={StyleSheet.absoluteFillObject}
                 barcodeScannerSettings={{
@@ -29,54 +33,37 @@ export default function Qr() {
                 }}
                 onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
             />
-            <View style={styles.overlay}>
-                <View style={styles.topOverlay} />
-                <View style={styles.centerRow}>
-                    <View style={styles.sideOverlay} />
-                    <View style={styles.focusBox} />
-                    <View style={styles.sideOverlay} />
-                </View>
-                <View style={styles.bottomOverlay} />
+            <View justifyContent="center" alignItems="center">
+                <View
+                    width={width}
+                    height={(height - focusBoxSize) / 2}
+                    backgroundColor="rgba(0, 0, 0, 0.5)"
+                />
+                <XStack>
+                    <View
+                        width={(width - focusBoxSize) / 2}
+                        height={focusBoxSize}
+                        backgroundColor="rgba(0, 0, 0, 0.5)"
+                    />
+                    <View
+                        width={focusBoxSize}
+                        height={focusBoxSize}
+                        borderColor="$white"
+                        borderWidth={2}
+                        backgroundColor="transparent"
+                    />
+                    <View
+                        width={(width - focusBoxSize) / 2}
+                        height={focusBoxSize}
+                        backgroundColor="rgba(0, 0, 0, 0.5)"
+                    />
+                </XStack>
+                <View
+                    width={width}
+                    height={(height - focusBoxSize) / 2}
+                    backgroundColor="rgba(0, 0, 0, 0.5)"
+                />
             </View>
         </View>
     );
 }
-
-const { width, height } = Dimensions.get("window");
-const focusBoxSize = width * 0.7;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    overlay: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    topOverlay: {
-        width: width,
-        height: (height - focusBoxSize) / 2,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-    centerRow: {
-        flexDirection: "row",
-    },
-    sideOverlay: {
-        width: (width - focusBoxSize) / 2,
-        height: focusBoxSize,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-    focusBox: {
-        width: focusBoxSize,
-        height: focusBoxSize,
-        borderColor: "white",
-        borderWidth: 2,
-        backgroundColor: "transparent",
-    },
-    bottomOverlay: {
-        width: width,
-        height: (height - focusBoxSize) / 2,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-});
